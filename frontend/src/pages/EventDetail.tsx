@@ -11,8 +11,9 @@ import {
   useRouteLoaderData,
 } from 'react-router-dom';
 import { Event } from './Events';
-import { API_URL } from '../configs';
+import { API_URL, EVENTS } from '../configs';
 import EventsList from '../components/EventsList';
+import { getAuthToken } from '../util/auth';
 
 export interface LoaderEventData {
   isError?: boolean;
@@ -45,7 +46,7 @@ const EventDetailPage = () => {
 export default EventDetailPage;
 
 const loadEvent = async (id: string) => {
-  const response = await fetch(API_URL + id);
+  const response = await fetch(API_URL + EVENTS + id);
 
   if (!response.ok) {
     throw json(
@@ -61,7 +62,7 @@ const loadEvent = async (id: string) => {
 };
 
 const loadEvents = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL + EVENTS);
 
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events.'
@@ -85,10 +86,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
+  const token = getAuthToken();
+
   const eventId = params.id;
 
-  const response = await fetch(API_URL + eventId, {
+  const response = await fetch(API_URL + EVENTS + eventId, {
     method: request.method,
+    headers: {
+      Authorization: 'Bearer ' + token,
+    },
   });
 
   if (!response.ok) {

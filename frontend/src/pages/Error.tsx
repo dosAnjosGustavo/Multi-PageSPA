@@ -3,13 +3,13 @@ import PageContent from '../components/PageContent';
 import { useRouteError } from 'react-router-dom';
 import MainNavigation from '../components/MainNavigation';
 
-interface Error {
-  data: any;
+interface DataError {
+  data: { message: string };
   status: number;
 }
 
 function ErrorPage() {
-  const error = useRouteError() as Error;
+  const error = useRouteError() as DataError;
   let title = 'An error occurred!';
   let message = 'Something went wrong!';
 
@@ -21,8 +21,6 @@ function ErrorPage() {
     title = 'Not found!';
     message = 'Could not find resource or page.';
   }
-
-  console.log(error.status);
 
   return (
     <>

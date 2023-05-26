@@ -12,6 +12,8 @@ import {
 
 import classes from './EventForm.module.css';
 import { Event } from '../pages/Events';
+import { getAuthToken } from '../util/auth';
+import { API_URL, EVENTS } from '../configs';
 
 interface EventFormProps {
   event?: Event;
@@ -108,17 +110,19 @@ export const action: ActionFunction = async ({ request, params }) => {
     description: data.get('description'),
   };
 
-  let url = 'http://localhost:8080/events/';
+  let url = API_URL + EVENTS;
 
   if (method === 'PATCH') {
     const eventId = params.id;
     url += eventId;
   }
 
+  const token = getAuthToken();
   const response = await fetch(url, {
     method: method,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
     },
     body: JSON.stringify(eventData),
   });

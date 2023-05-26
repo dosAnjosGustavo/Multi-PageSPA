@@ -1,7 +1,7 @@
 import React from 'react';
 import EventForm from '../components/EventForm';
 import { ActionFunction, json, redirect } from 'react-router-dom';
-import { API_URL } from '../configs';
+import { API_URL, EVENTS } from '../configs';
 
 const NewEventPage = () => {
   return <EventForm method={'post'} />;
@@ -19,7 +19,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     description: data.get('description'),
   };
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(API_URL + EVENTS, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

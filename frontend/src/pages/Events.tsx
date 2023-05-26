@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { useLoaderData, json, defer, Await } from 'react-router-dom';
 
 import EventsList from '../components/EventsList';
-import { API_URL } from '../configs';
+import { API_URL, EVENTS } from '../configs';
 
 export interface Event {
   id: string;
@@ -34,7 +34,7 @@ function EventsPage() {
 export default EventsPage;
 
 const loadEvents = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL + EVENTS);
 
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events.'

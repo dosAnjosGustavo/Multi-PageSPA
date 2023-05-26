@@ -1,1 +1,2 @@
-export const API_URL = 'http://localhost:8080/events/';
+export const API_URL = 'http://localhost:8080/';
+export const EVENTS = 'events/';

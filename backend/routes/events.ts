@@ -1,17 +1,12 @@
-const express = require('express');
+import express from 'express';
 
-const { getAll, get, add, replace, remove } = require('../data/event');
-const { checkAuth } = require('../util/auth');
-const {
-  isValidText,
-  isValidDate,
-  isValidImageUrl,
-} = require('../util/validation');
+import { getAll, get, add, replace, remove } from '../data/event';
+import { checkAuthMiddleware } from '../util/auth';
+import { isValidText, isValidDate, isValidImageUrl } from '../util/validation';
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  console.log(req.token);
   try {
     const events = await getAll();
     res.json({ events: events });
@@ -29,13 +24,13 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.use(checkAuth);
+router.use(checkAuthMiddleware);
 
 router.post('/', async (req, res, next) => {
   console.log(req.token);
   const data = req.body;
 
-  let errors = {};
+  let errors: ErrorResponse = {};
 
   if (!isValidText(data.title)) {
     errors.title = 'Invalid title.';
@@ -69,9 +64,9 @@ router.post('/', async (req, res, next) => {
 });
 
 router.patch('/:id', async (req, res, next) => {
-  const data = req.body;
+  const data = req.body as EventData;
 
-  let errors = {};
+  let errors: ErrorResponse = {};
 
   if (!isValidText(data.title)) {
     errors.title = 'Invalid title.';
@@ -113,4 +108,4 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

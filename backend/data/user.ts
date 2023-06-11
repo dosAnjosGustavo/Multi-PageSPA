@@ -1,10 +1,10 @@
-const { hash } = require('bcryptjs');
-const { v4: generateId } = require('uuid');
+import { hash } from 'bcryptjs';
+import { v4 as generateId } from 'uuid';
 
-const { NotFoundError } = require('../util/errors');
-const { readData, writeData } = require('./util');
+import { NotFoundError } from '../util/errors';
+import { readData, writeData } from './util';
 
-async function add(data) {
+export async function add(data: User) {
   const storedData = await readData();
   const userId = generateId();
   const hashedPw = await hash(data.password, 12);
@@ -16,7 +16,7 @@ async function add(data) {
   return { id: userId, email: data.email };
 }
 
-async function get(email) {
+export async function get(email: string) {
   const storedData = await readData();
   if (!storedData.users || storedData.users.length === 0) {
     throw new NotFoundError('Could not find any users.');
@@ -29,6 +29,3 @@ async function get(email) {
 
   return user;
 }
-
-exports.add = add;
-exports.get = get;

@@ -1,22 +1,23 @@
-const { sign, verify } = require('jsonwebtoken');
-const { compare } = require('bcryptjs');
-const { NotAuthError } = require('./errors');
+import { sign, verify } from 'jsonwebtoken';
+import { compare } from 'bcryptjs';
+import { NotAuthError } from './errors';
+import express from 'express';
 
 const KEY = 'supersecret';
 
-function createJSONToken(email) {
+export function createJSONToken(email: string) {
   return sign({ email }, KEY, { expiresIn: '1h' });
 }
 
-function validateJSONToken(token) {
+export function validateJSONToken(token: string) {
   return verify(token, KEY);
 }
 
-function isValidPassword(password, storedPassword) {
+export function isValidPassword(password: string, storedPassword: string) {
   return compare(password, storedPassword);
 }
 
-function checkAuthMiddleware(req, res, next) {
+export const checkAuthMiddleware: express.Handler = (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next();
   }
@@ -39,9 +40,4 @@ function checkAuthMiddleware(req, res, next) {
     return next(new NotAuthError('Not authenticated.'));
   }
   next();
-}
-
-exports.createJSONToken = createJSONToken;
-exports.validateJSONToken = validateJSONToken;
-exports.isValidPassword = isValidPassword;
-exports.checkAuth = checkAuthMiddleware;
+};
